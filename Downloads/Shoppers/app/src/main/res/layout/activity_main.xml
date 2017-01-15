@@ -8,10 +8,29 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.shashankraj.shoppers.MainActivity">
+    tools:context="com.example.shashankraj.beaconcheck_1.MainActivity">
 
     <TextView
+        android:id="@+id/CampedB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="Camped"/>
+
+    <TextView
+        android:id="@+id/RangedBeacons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RangedBeacons = 0"
+        android:layout_below="@+id/CampedB"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="14dp" />
+
+    <TextView
+        android:text="Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/RangedBeacons"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="22dp"
+        android:id="@+id/timeStamp" />
 </RelativeLayout>
