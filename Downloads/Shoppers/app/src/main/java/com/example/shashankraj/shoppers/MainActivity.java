@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     int major = 0 ,minor = 0;
     private int flag=0;
     long entryTime = 0;
-    static  int count;
+    static  int count=15;
     private boolean appInForeground = true;
     public  static boolean isPopupVisible=false;
 
@@ -147,12 +147,14 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void campedOnBeacon(Context context, MSBeacon msBeacon) {
-            //Log.v(TAG,msBeacon.getMajor()+"");
-            if (major != msBeacon.getMajor() || minor != msBeacon.getMinor()) {
 
+            if (major != msBeacon.getMajor() || minor != msBeacon.getMinor()) {
                 camp.setText("Major = " + msBeacon.getMajor() + " Minor = " + msBeacon.getMinor());
                 major=msBeacon.getMajor();
                 minor=msBeacon.getMinor();
+                long currentTime=(System.currentTimeMillis() / 1000) - entryTime;
+                time.setText("" + currentTime);
+                entryTime=System.currentTimeMillis()/1000;
 
             }
         }
@@ -163,7 +165,58 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void triggeredRule(final Context context, String ruleName, ArrayList<MSAction> actions) {
+            HashMap<String, Object> messageMap;
+            if (appInForeground) {
+                for (MSAction action : actions) {
+                    messageMap = action.getMessage();
+                    Log.v(TAG,"BTMessage" +action.getMessage().toString());
 
+                    switch (action.getType()) {
+                        case MSActionTypePopup:
+                            if (!isPopupVisible) {
+                                isPopupVisible = true;
+                                Log.v(TAG,"Popup");
+                            }
+                            break;
+
+                        case MSActionTypeCard:
+                            if (!isPopupVisible) {
+                                isPopupVisible = true;
+                                MSCard card = (MSCard) messageMap.get("card");
+
+                                String title =card.getTitle();
+                                Log.v(TAG,"Tile Card : "+ title);
+
+
+                                switch (card.getType()) {
+                                    case MSCardTypePhoto:
+                                        Log.v(TAG,"BTPhoto");
+                                        break;
+
+                                    case MSCardTypeSummary:
+                                        Log.v(TAG,"BTSummary");
+                                        break;
+
+                                    case MSCardTypeMedia:
+                                        Log.v(TAG,"BTYoutube");
+                                        break;
+                                }
+                            }
+                            break;
+
+                        case MSActionTypeWebpage:
+                            if (!isPopupVisible) {
+                                Log.v(TAG,"BTWebPage");
+                                isPopupVisible = true;
+                            }
+                            break;
+
+                        case MSActionTypeCustom:
+                            MSLogger.log("Card id: " + action.getActionID());
+                            break;
+                    }
+                }
+            }
         }
 
 
