@@ -147,14 +147,18 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void campedOnBeacon(Context context, MSBeacon msBeacon) {
-            Log.v(TAG,msBeacon.getMajor()+"");
-            camp.setText("Major = " + msBeacon.getMajor() + " Minor = " + msBeacon.getMinor());
+            //Log.v(TAG,msBeacon.getMajor()+"");
+            if (major != msBeacon.getMajor() || minor != msBeacon.getMinor()) {
 
+                camp.setText("Major = " + msBeacon.getMajor() + " Minor = " + msBeacon.getMinor());
+                major=msBeacon.getMajor();
+                minor=msBeacon.getMinor();
+
+            }
         }
-
         @Override
         public void exitedBeacon(Context context, MSBeacon msBeacon) {
-            camp.setText("Camped on None");
+            //camp.setText("Camped on None");
         }
 
         @Override
@@ -170,7 +174,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void exitedRegion(Context context, String s) {
-
+            camp.setText("None Camped");
+            major=0;
+            minor=0;
         }
 
         @Override
