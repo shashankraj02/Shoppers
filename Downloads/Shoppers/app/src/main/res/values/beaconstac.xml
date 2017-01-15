@@ -23,7 +23,7 @@
     <integer name="organization_id">720</integer>
 
     <!-- Provider authority -->
-    <string name="provider">com.example.shashankraj.beaconcheck_1.provider</string>
+    <string name="provider">com.example.shashankraj.shoppers.provider</string>
 
     <!-- Whether bug tracking is enabled -->
     <bool name="bugTrackingEnabled">true</bool>

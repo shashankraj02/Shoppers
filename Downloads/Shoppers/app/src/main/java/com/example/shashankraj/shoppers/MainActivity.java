@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void rangedBeacons(Context context, ArrayList<MSBeacon> rangedBeacons) {
 
+            bCount.setText("RangedBeacons " + rangedBeacons.size());
 
 
         }
@@ -146,14 +147,14 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void campedOnBeacon(Context context, MSBeacon msBeacon) {
-
-
+            Log.v(TAG,msBeacon.getMajor()+"");
+            camp.setText("Major = " + msBeacon.getMajor() + " Minor = " + msBeacon.getMinor());
 
         }
 
         @Override
         public void exitedBeacon(Context context, MSBeacon msBeacon) {
-
+            camp.setText("Camped on None");
         }
 
         @Override
@@ -212,10 +213,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    public void setIsPopupVisible(boolean isPopupVisible) {
-        this.isPopupVisible = isPopupVisible;
-    }
 }
 
 
