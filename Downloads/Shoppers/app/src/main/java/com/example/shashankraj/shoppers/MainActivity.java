@@ -155,7 +155,9 @@ public class MainActivity extends AppCompatActivity {
                 long currentTime=(System.currentTimeMillis() / 1000) - entryTime;
                 time.setText("" + currentTime);
                 entryTime=System.currentTimeMillis()/1000;
-
+                if (currentTime < 60){
+                    Toast.makeText(context,"Customer Not Interested",Toast.LENGTH_SHORT).show();
+                }
             }
         }
         @Override
@@ -243,24 +245,41 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+
     @Override
     protected void onDestroy()
     {
         super.onDestroy();
-
+        try{
+            bstac.stopRangingBeacons();
+        }catch (MSException e)
+        {
+            e.printStackTrace();
+        }
 
     }
     @Override
     protected void onPause(){
         super.onPause();
-
+        try{
+            bstac.stopRangingBeacons();
+        }catch (MSException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-
+        try{
+            bstac.startRangingBeacons();
+        }catch (MSException e)
+        {
+            e.printStackTrace();
+        }
     }
+
     public void checkPermission(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
