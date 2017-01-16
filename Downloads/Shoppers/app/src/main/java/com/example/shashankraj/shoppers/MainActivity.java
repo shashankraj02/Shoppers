@@ -17,8 +17,11 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobstac.beaconstac.core.Beaconstac;
 import com.mobstac.beaconstac.core.BeaconstacReceiver;
 import com.mobstac.beaconstac.core.MSConstants;
@@ -43,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     int major = 0 ,minor = 0;
     private int flag=0;
     long entryTime = 0;
-    static  int count=15;
+    static  int count;
     private boolean appInForeground = true;
     public  static boolean isPopupVisible=false;
 
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference myRef = mdatabase.getReference();
 
     private boolean registered = false;
+    ValueEventListener valueEventListener;
 
 
     @Override
@@ -157,7 +161,23 @@ public class MainActivity extends AppCompatActivity {
                 long currentTime=(System.currentTimeMillis() / 1000) - entryTime;
                 time.setText("" + currentTime);
                 entryTime=System.currentTimeMillis()/1000;
+                valueEventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        count = Integer.parseInt(dataSnapshot.child("count").getValue().toString());
+                        count+=1;
+                        myRef.child("count").setValue(count);
+                        bstac.setUserFacts("bt",count);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                };
+                myRef.addValueEventListener(valueEventListener);
                 if (currentTime < 60){
+                    myRef.child("change").setValue("no");
                     Toast.makeText(context,"Customer Not Interested",Toast.LENGTH_SHORT).show();
                 }
             }
