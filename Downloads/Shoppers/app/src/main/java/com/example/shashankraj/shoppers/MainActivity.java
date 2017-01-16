@@ -164,10 +164,13 @@ public class MainActivity extends AppCompatActivity {
                 valueEventListener = new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        count = Integer.parseInt(dataSnapshot.child("count").getValue().toString());
-                        count+=1;
-                        myRef.child("count").setValue(count);
-                        bstac.setUserFacts("bt",count);
+                        if(flag==0) {
+                            count = Integer.parseInt(dataSnapshot.child("count").getValue().toString());
+                            count += 1;
+                            flag=1;
+                            myRef.child("count").setValue(count);
+                            bstac.setUserFacts("bt", count);
+                        }
                     }
 
                     @Override
