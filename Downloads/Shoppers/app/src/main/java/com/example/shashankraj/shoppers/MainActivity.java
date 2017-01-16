@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.mobstac.beaconstac.core.MSPlace;
 import com.mobstac.beaconstac.models.MSAction;
 import com.mobstac.beaconstac.models.MSBeacon;
 import com.mobstac.beaconstac.models.MSCard;
+import com.mobstac.beaconstac.models.MSMedia;
 import com.mobstac.beaconstac.utils.MSException;
 import com.mobstac.beaconstac.utils.MSLogger;
 
@@ -162,9 +164,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void triggeredRule(final Context context, String ruleName, ArrayList<MSAction> actions) {
             HashMap<String, Object> messageMap;
+
             if (appInForeground) {
                 for (MSAction action : actions) {
                     messageMap = action.getMessage();
+                    MSMedia m;
+
                     Log.v(TAG,"BTMessage" +action.getMessage().toString());
 
                     switch (action.getType()) {
@@ -179,6 +184,10 @@ public class MainActivity extends AppCompatActivity {
                             if (!isPopupVisible) {
                                 isPopupVisible = true;
                                 MSCard card = (MSCard) messageMap.get("card");
+                                String msgLabel;
+                                String msgAction;
+                                String src;
+
 
                                 String title =card.getTitle();
                                 Log.v(TAG,"Tile Card : "+ title);
@@ -191,6 +200,15 @@ public class MainActivity extends AppCompatActivity {
 
                                     case MSCardTypeSummary:
                                         Log.v(TAG,"BTSummary");
+                                        ArrayList<String> cardUrls = new ArrayList<>();
+                                        for (int i = 0; i < card.getMediaArray().size(); i++) {
+                                            m = card.getMediaArray().get(i);
+                                            src = m.getMediaUrl().toString();
+                                            cardUrls.add(src);
+                                        }
+                                        msgLabel = (String) messageMap.get("notificationOkLabel");
+                                        msgAction = (String) messageMap.get("notificationOkAction");
+                                        showPopupDialog(card.getTitle(), card.getBody(), cardUrls, msgLabel, msgAction);
                                         break;
 
                                     case MSCardTypeMedia:
@@ -273,6 +291,32 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    private void showPopupDialog(String title, String text, ArrayList<String> url, String... ok_data) {
+        String ok_label = "";
+        String ok_action = "";
+
+        if (ok_data.length == 2) {
+            if (ok_data[0] != null && ok_data[1] != null) {
+                ok_label = ok_data[0];
+                ok_action = ok_data[1];
+            }
+        }
+
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        ImageCarouselDialog imageCarouselDialog =
+                ImageCarouselDialog.newInstance(title, text, url, ok_label, ok_action);
+        imageCarouselDialog.setRetainInstance(true);
+        isPopupVisible = true;
+
+        imageCarouselDialog.show(fragmentManager, "Dialog Fragment");
+    }
+
+    public void setIsPopupVisible(boolean isPopupVisible) {
+        this.isPopupVisible = isPopupVisible;
+    }
+
 
     public void checkPermission(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
