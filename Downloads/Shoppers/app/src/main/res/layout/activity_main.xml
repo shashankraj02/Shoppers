@@ -14,13 +14,13 @@
         android:id="@+id/CampedB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Camped"/>
+        android:text="Camped on None"/>
 
     <TextView
         android:id="@+id/RangedBeacons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="RangedBeacons = 0"
+        android:text="RangedBeacons : 0"
         android:layout_below="@+id/CampedB"
         android:layout_alignParentStart="true"
         android:layout_marginTop="14dp" />
@@ -33,4 +33,5 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="22dp"
         android:id="@+id/timeStamp" />
+
 </RelativeLayout>

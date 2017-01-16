@@ -38,10 +38,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView bCount;
     private TextView camp;
     private TextView time;
-    int major = 0 ,minor = 0;
     private int flag=0;
+    long currentTime=System.currentTimeMillis()/1000;
     long entryTime = 0;
-    static  int count=15;
+    int major=0 , minor=0;
+    static  int count;
     private boolean appInForeground = true;
     public  static boolean isPopupVisible=false;
 
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         bstac = Beaconstac.getInstance(this);
         bstac.setRegionParams("F94DBB23-2266-7822-3782-57BEAC0952AC", "com.example.shashankraj.beaconcheck");
-        bstac.setUserFacts("bt", count);
+        //bstac.setUserFacts("bt", count);
         bstac.syncRules();
 
 
@@ -144,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void campedOnBeacon(Context context, MSBeacon msBeacon) {
 
-            if (major != msBeacon.getMajor() || minor != msBeacon.getMinor()) {
+            /*if (major != msBeacon.getMajor() || minor != msBeacon.getMinor()) {
                 camp.setText("Major = " + msBeacon.getMajor() + " Minor = " + msBeacon.getMinor());
                 major=msBeacon.getMajor();
                 minor=msBeacon.getMinor();
@@ -154,11 +155,27 @@ public class MainActivity extends AppCompatActivity {
                 if (currentTime < 60){
                     Toast.makeText(context,"Customer Not Interested",Toast.LENGTH_SHORT).show();
                 }
-            }
+            }*/
+            major = msBeacon.getMajor();
+            minor = msBeacon.getMinor();
+
+            camp.setText("Camped On beacon " + major + " "+ minor);
+            entryTime=System.currentTimeMillis()/1000;
+
+
         }
         @Override
         public void exitedBeacon(Context context, MSBeacon msBeacon) {
-            //camp.setText("Camped on None");
+            camp.setText("Camped on None");
+            currentTime=(System.currentTimeMillis() / 1000) - entryTime;
+            time.setText("Camped On beacon" + " " + major + " "+ minor + " for " + currentTime);
+            if (currentTime < 60) {
+                Toast.makeText(context, "Customer Not Interested", Toast.LENGTH_SHORT).show();
+            }
+            else
+                Toast.makeText(context,"Customer Interested",Toast.LENGTH_SHORT).show();
+
+
         }
 
         @Override
@@ -242,8 +259,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void exitedRegion(Context context, String s) {
             camp.setText("None Camped");
-            major=0;
-            minor=0;
+            currentTime=(System.currentTimeMillis() / 1000) - entryTime;
+            time.setText("" + currentTime);
         }
 
         @Override
@@ -275,6 +292,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         try{
             bstac.stopRangingBeacons();
+            camp.setText("Camped on None");
         }catch (MSException e)
         {
             e.printStackTrace();
@@ -321,7 +339,7 @@ public class MainActivity extends AppCompatActivity {
     public void checkPermission(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                ){//Can add more as per requirement
+                ){
 
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
