@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "972435835706",
+    "firebase_url": "https://shoppers-15907.firebaseio.com",
+    "project_id": "shoppers-15907",
+    "storage_bucket": "shoppers-15907.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972435835706:android:cb330162db39a422",
+        "android_client_info": {
+          "package_name": "com.example.shashankraj.shoppers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972435835706-bcg2t7ii1e2q6vg3kto3bsgn92uqu2k0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shashankraj.shoppers",
+            "certificate_hash": "F12A3192A13BA55A27D93A5F08DE679C5EF7B28E"
+          }
+        },
+        {
+          "client_id": "972435835706-q3g29r676utjebpujns0duh6drdeal82.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZO3ON08JHqMdUpkAxULqi4VCLmbXD8zo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972435835706-q3g29r676utjebpujns0duh6drdeal82.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

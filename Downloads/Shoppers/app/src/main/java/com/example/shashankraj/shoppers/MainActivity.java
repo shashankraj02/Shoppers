@@ -17,6 +17,11 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobstac.beaconstac.core.Beaconstac;
 import com.mobstac.beaconstac.core.BeaconstacReceiver;
 import com.mobstac.beaconstac.core.MSConstants;
@@ -41,7 +46,10 @@ public class MainActivity extends AppCompatActivity {
     private int flag=0;
     long currentTime=System.currentTimeMillis()/1000;
     long entryTime = 0;
+<<<<<<< HEAD
     int major=0 , minor=0;
+=======
+>>>>>>> 7b647c233989e974d80624272d79c8a9edc21e82
     static  int count;
     private boolean appInForeground = true;
     public  static boolean isPopupVisible=false;
@@ -52,15 +60,20 @@ public class MainActivity extends AppCompatActivity {
 
     private Beaconstac bstac;
     boolean entry=false;
+    FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = mdatabase.getReference();
 
     private boolean registered = false;
+    ValueEventListener valueEventListener;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        myRef.child("count");
+        myRef.child("change");
+        myRef.child("change").setValue("yes");
 
         checkPermission();
 
@@ -152,7 +165,26 @@ public class MainActivity extends AppCompatActivity {
                 long currentTime=(System.currentTimeMillis() / 1000) - entryTime;
                 time.setText("" + currentTime);
                 entryTime=System.currentTimeMillis()/1000;
+                valueEventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(flag==0) {
+                            count = Integer.parseInt(dataSnapshot.child("count").getValue().toString());
+                            count += 1;
+                            flag=1;
+                            myRef.child("count").setValue(count);
+                            bstac.setUserFacts("bt", count);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                };
+                myRef.addValueEventListener(valueEventListener);
                 if (currentTime < 60){
+                    myRef.child("change").setValue("no");
                     Toast.makeText(context,"Customer Not Interested",Toast.LENGTH_SHORT).show();
                 }
             }*/
@@ -166,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         public void exitedBeacon(Context context, MSBeacon msBeacon) {
+<<<<<<< HEAD
             camp.setText("Camped on None");
             currentTime=(System.currentTimeMillis() / 1000) - entryTime;
             time.setText("Camped On beacon" + " " + major + " "+ minor + " for " + currentTime);
@@ -176,6 +209,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(context,"Customer Interested",Toast.LENGTH_SHORT).show();
 
 
+=======
+            //camp.setText("Camped on None");
+            flag=0;
+>>>>>>> 7b647c233989e974d80624272d79c8a9edc21e82
         }
 
         @Override
