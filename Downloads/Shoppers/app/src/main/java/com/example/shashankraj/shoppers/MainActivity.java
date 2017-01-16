@@ -17,6 +17,8 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mobstac.beaconstac.core.Beaconstac;
 import com.mobstac.beaconstac.core.BeaconstacReceiver;
 import com.mobstac.beaconstac.core.MSConstants;
@@ -51,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Beaconstac bstac;
     boolean entry=false;
+    FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = mdatabase.getReference();
 
     private boolean registered = false;
 
@@ -59,7 +63,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        myRef.child("count");
+        myRef.child("change");
+        myRef.child("change").setValue("yes");
 
         checkPermission();
 
