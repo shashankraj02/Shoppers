@@ -188,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void exitedBeacon(Context context, MSBeacon msBeacon) {
             //camp.setText("Camped on None");
+            flag=0;
         }
 
         @Override
