@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView time;
     private int flag = 0;
     long currentTime = System.currentTimeMillis() / 1000;
-    long entryTime = 0;
+    long entryTime = currentTime;
     int major = 0, minor = 0;
     static int count;
     private boolean appInForeground = true;
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         myRef.child("count");
         myRef.child("change");
-        myRef.child("change").setValue("yes");
+        //myRef.child("change").setValue("yes");
 
         checkPermission();
 
@@ -159,15 +159,16 @@ public class MainActivity extends AppCompatActivity {
             valueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (flag == 0) {
-                        count = Integer.parseInt(dataSnapshot.child("count").getValue().toString());
-                        count += 1;
-                        flag = 1;
-                        myRef.child("count").setValue(count);
-                        bstac.setUserFacts("test", count);
+                    if (currentTime < 20) {
+                        if (flag == 0) {
+                            count = Integer.parseInt(dataSnapshot.child("count").getValue().toString());
+                            count += 1;
+                            flag = 1;
+                            myRef.child("count").setValue(count);
+                            bstac.setUserFacts("bt", count);
+                        }
                     }
                 }
-
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
@@ -185,14 +186,12 @@ public class MainActivity extends AppCompatActivity {
 
             camp.setText("Camped on None");
             currentTime=(System.currentTimeMillis() / 1000) - entryTime;
-            time.setText("Camped On beacon" + " " + major + " "+ minor + " for " + currentTime);
+            time.setText("Camped On beacon" + " " + major + " "+ minor + " for " + currentTime + " sec");
             myRef.addValueEventListener(valueEventListener);
-            if (currentTime < 60) {
+            if (currentTime < 20) {
                 myRef.child("change").setValue("no");
                 Toast.makeText(context, "Customer Not Interested", Toast.LENGTH_SHORT).show();
             }
-            else
-                Toast.makeText(context,"Customer Interested",Toast.LENGTH_SHORT).show();
             flag=0;
 
         }
