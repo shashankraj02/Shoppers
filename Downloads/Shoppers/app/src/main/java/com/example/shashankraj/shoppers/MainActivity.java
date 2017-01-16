@@ -43,23 +43,20 @@ public class MainActivity extends AppCompatActivity {
     private TextView bCount;
     private TextView camp;
     private TextView time;
-    private int flag=0;
-    long currentTime=System.currentTimeMillis()/1000;
+    private int flag = 0;
+    long currentTime = System.currentTimeMillis() / 1000;
     long entryTime = 0;
-<<<<<<< HEAD
-    int major=0 , minor=0;
-=======
->>>>>>> 7b647c233989e974d80624272d79c8a9edc21e82
-    static  int count;
+    int major = 0, minor = 0;
+    static int count;
     private boolean appInForeground = true;
-    public  static boolean isPopupVisible=false;
+    public static boolean isPopupVisible = false;
 
     private BluetoothAdapter mBluetoothAdapter;
     private static final int REQUEST_ENABLE_BT = 1;
 
 
     private Beaconstac bstac;
-    boolean entry=false;
+    boolean entry = false;
     FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
     DatabaseReference myRef = mdatabase.getReference();
 
@@ -103,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
         bstac = Beaconstac.getInstance(this);
         bstac.setRegionParams("F94DBB23-2266-7822-3782-57BEAC0952AC", "com.example.shashankraj.beaconcheck");
-        //bstac.setUserFacts("bt", count);
         bstac.syncRules();
 
 
@@ -116,11 +112,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void init() {
         bCount = (TextView) findViewById(R.id.RangedBeacons);
-        camp = (TextView)findViewById(R.id.CampedB) ;
-        time = (TextView)findViewById(R.id.timeStamp) ;
+        camp = (TextView) findViewById(R.id.CampedB);
+        time = (TextView) findViewById(R.id.timeStamp);
 
 
         registerBroadcast();
@@ -142,8 +137,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     BeaconstacReceiver myBroadcastReceiver = new BeaconstacReceiver() {
         @Override
         public void rangedBeacons(Context context, ArrayList<MSBeacon> rangedBeacons) {
@@ -154,65 +147,54 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
         @Override
         public void campedOnBeacon(Context context, MSBeacon msBeacon) {
 
-            /*if (major != msBeacon.getMajor() || minor != msBeacon.getMinor()) {
-                camp.setText("Major = " + msBeacon.getMajor() + " Minor = " + msBeacon.getMinor());
-                major=msBeacon.getMajor();
-                minor=msBeacon.getMinor();
-                long currentTime=(System.currentTimeMillis() / 1000) - entryTime;
-                time.setText("" + currentTime);
-                entryTime=System.currentTimeMillis()/1000;
-                valueEventListener = new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(flag==0) {
-                            count = Integer.parseInt(dataSnapshot.child("count").getValue().toString());
-                            count += 1;
-                            flag=1;
-                            myRef.child("count").setValue(count);
-                            bstac.setUserFacts("bt", count);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                };
-                myRef.addValueEventListener(valueEventListener);
-                if (currentTime < 60){
-                    myRef.child("change").setValue("no");
-                    Toast.makeText(context,"Customer Not Interested",Toast.LENGTH_SHORT).show();
-                }
-            }*/
             major = msBeacon.getMajor();
             minor = msBeacon.getMinor();
 
-            camp.setText("Camped On beacon " + major + " "+ minor);
-            entryTime=System.currentTimeMillis()/1000;
+            camp.setText("Camped On beacon " + major + " " + minor);
+            entryTime = System.currentTimeMillis() / 1000;
+
+            valueEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (flag == 0) {
+                        count = Integer.parseInt(dataSnapshot.child("count").getValue().toString());
+                        count += 1;
+                        flag = 1;
+                        myRef.child("count").setValue(count);
+                        bstac.setUserFacts("test", count);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
 
 
         }
+
+
+
+
         @Override
         public void exitedBeacon(Context context, MSBeacon msBeacon) {
-<<<<<<< HEAD
+
             camp.setText("Camped on None");
             currentTime=(System.currentTimeMillis() / 1000) - entryTime;
             time.setText("Camped On beacon" + " " + major + " "+ minor + " for " + currentTime);
+            myRef.addValueEventListener(valueEventListener);
             if (currentTime < 60) {
+                myRef.child("change").setValue("no");
                 Toast.makeText(context, "Customer Not Interested", Toast.LENGTH_SHORT).show();
             }
             else
                 Toast.makeText(context,"Customer Interested",Toast.LENGTH_SHORT).show();
-
-
-=======
-            //camp.setText("Camped on None");
             flag=0;
->>>>>>> 7b647c233989e974d80624272d79c8a9edc21e82
+
         }
 
         @Override
