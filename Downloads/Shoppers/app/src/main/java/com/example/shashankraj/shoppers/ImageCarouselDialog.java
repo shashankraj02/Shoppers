@@ -68,7 +68,7 @@ public class ImageCarouselDialog extends DialogFragment {
         if (ok_label.equals("")) {
             rootView = inflater.inflate(R.layout.dialog_fragment_carousel, container, false);
         } else {
-            rootView = null;
+            rootView = inflater.inflate(R.layout.dialog_fragment_carousel_notification,container,false);
         }
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setCancelable(false);
